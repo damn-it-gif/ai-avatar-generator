@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Avatar Studio</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: #272343;
+  background: linear-gradient(135deg,#fce7f3,#e0e7ff,#d1fae5);
+  min-height: 100vh;
+}
+header {
+  text-align: center;
+  padding: 28px 12px;
+}
+header h1 { margin: 0; font-size: 34px; }
+header p { color: #575569; }
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 25px;
+  padding: 10px 18px 35px;
+}
+.panel {
+  background: white;
+  padding: 22px;
+  border-radius: 22px;
+  box-shadow: 0 8px 25px #55448822;
+  width: min(100%, 390px);
+}
+.preview { text-align: center; }
+#avatar {
+  width: 100%;
+  max-width: 320px;
+  border-radius: 18px;
+}
+label {
+  display: block;
+  margin: 15px 0 6px;
+  font-weight: bold;
+}
+select, button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+}
+button {
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 12px;
+  transition: .2s;
+}
+button:hover { transform: translateY(-2px); }
+.primary { background: #6c63ff; color: white; }
+.secondary { background: #e9e7ff; color: #393080; }
+h2 { margin-top: 0; }
+footer {
+  text-align: center;
+  padding: 18px;
+  color: #575569;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>✨ AI Avatar Studio</h1>
+  <p>Create your own digital character!</p>
+</header>
+
+<main class="container">
+  <section class="panel preview">
+    <h2>Your Avatar 🎨</h2>
+
+    <svg id="avatar" xmlns="http://www.w3.org/2000/svg"
+         viewBox="0 0 320 360" role="img"
+         aria-label="Your customized cartoon avatar">
+      <rect id="bg" width="320" height="360" rx="20"
+            fill="#dbeafe"/>
+      <circle cx="160" cy="145" r="105"
+              fill="#ffffff" opacity=".35"/>
+      <path id="body" d="" fill="#6c63ff"/>
+      <path id="neck" d="M137 210 L183 210 L188 245
+        L132 245 Z" fill="#d99a70"/>
+      <ellipse id="ear1" cx="111" cy="157" rx="15"
+        ry="22" fill="#d99a70"/>
+      <ellipse id="ear2" cx="209" cy="157" rx="15"
+        ry="22" fill="#d99a70"/>
+      <ellipse id="face" cx="160" cy="155" rx="58"
+        ry="72" fill="#d99a70"/>
+      <path id="hairBack" d="" fill="#38251c"/>
+      <g id="features">
+        <ellipse cx="139" cy="153" rx="5" ry="7"
+          fill="#38251c"/>
+        <ellipse cx="181" cy="153" rx="5" ry="7"
+          fill="#38251c"/>
+        <path d="M143 181 Q160 194 177 181"
+          stroke="#a44d45" stroke-width="3"
+          fill="none" stroke-linecap="round"/>
+        <ellipse cx="128" cy="173" rx="9" ry="5"
+          fill="#f58e9a" opacity=".5"/>
+        <ellipse cx="192" cy="173" rx="9" ry="5"
+          fill="#f58e9a" opacity=".5"/>
+      </g>
+      <path id="hair" d="" fill="#38251c"/>
+      <g id="accessory"></g>
+      <text x="160" y="337" text-anchor="middle"
+        font-size="15" font-weight="bold" fill="#272343">
+        MY AVATAR
+      </text>
+    </svg>
+
+    <button class="primary" onclick="randomize()">
+      🎲 Generate Random Avatar
+    </button>
+    <button class="secondary" onclick="downloadAvatar()">
+      ⬇ Download Avatar (PNG)
+    </button>
+    <button class="secondary" onclick="downloadSVG()">
+      Download as SVG
+    </button>
+  </section>
+
+  <section class="panel">
+    <h2>Customize Your Character</h2>
+
+    <label for="skin">Skin Tone</label>
+    <select id="skin" onchange="updateAvatar()">
+      <option value="#ffdfc4">Fair</option>
+      <option value="#f1c19b" selected>Light brown</option>
+      <option value="#d99a70">Medium brown</option>
+      <option value="#ad704c">Brown</option>
+      <option value="#70452f">Deep brown</option>
+    </select>
+
+    <label for="hairStyle">Hairstyle</label>
+    <select id="hairStyle" onchange="updateAvatar()">
+      <option value="short">Short</option>
+      <option value="long">Long</option>
+      <option value="curly">Curly</option>
+      <option value="bun">Bun</option>
+      <option value="spiky">Spiky</option>
+    </select>
+
+    <label for="hairColor">Hair Colour</label>
+    <select id="hairColor" onchange="updateAvatar()">
+      <option value="#38251c">Black-brown</option>
+      <option value="#171717">Black</option>
+      <option value="#754c24">Brown</option>
+      <option value="#d6a34d">Golden</option>
+      <option value="#744c9e">Purple</option>
+      <option value="#e16b83">Pink</option>
+    </select>
+
+    <label for="eyes">Eye Style</label>
+    <select id="eyes" onchange="updateAvatar()">
+      <option value="normal">Normal</option>
+      <option value="big">Big eyes</option>
+      <option value="happy">Happy eyes</option>
+    </select>
+
+    <label for="clothes">Outfit</label>
+    <select id="clothes" onchange="updateAvatar()">
+      <option value="#6c63ff">Purple</option>
+      <option value="#f472b6">Pink</option>
+      <option value="#22a699">Teal</option>
+      <option value="#2563eb">Blue</option>
+      <option value="#ef4444">Red</option>
+      <option value="#f59e0b">Orange</option>
+      <option value="#222222">Black</option>
+    </select>
+
+    <label for="background">Background</label>
+    <select id="background" onchange="updateAvatar()">
+      <option value="#dbeafe">Sky Blue</option>
+      <option value="#fce7f3">Pink</option>
+      <option value="#d1fae5">Mint Green</option>
+      <option value="#fef3c7">Pastel Yellow</option>
+      <option value="#e9d5ff">Lavender</option>
+      <option value="#ffffff">White</option>
+    </select>
+
+    <label for="accessoryChoice">Accessory</label>
+    <select id="accessoryChoice" onchange="updateAvatar()">
+      <option value="none">None</option>
+      <option value="glasses">Glasses</option>
+      <option value="crown">Crown</option>
+      <option value="earrings">Earrings</option>
+    </select>
+
+    <button class="primary" onclick="updateAvatar()">
+      ✨ Apply Changes
+    </button>
+    <button class="secondary" onclick="resetAvatar()">
+      ↻ Reset Avatar
+    </button>
+  </section>
+</main>
+
+<footer>
+  Made with 💜 for an AI Class Project | AI Avatar Studio
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+function updateAvatar() {
+  const skin = $("skin").value;
+  const hair = $("hairColor").value;
+  const style = $("hairStyle").value;
+  const clothes = $("clothes").value;
+  const eyeStyle = $("eyes").value;
+
+  $("bg").setAttribute("fill", $("background").value);
+  $("face").setAttribute("fill", skin);
+  $("ear1").setAttribute("fill", skin);
+  $("ear2").setAttribute("fill", skin);
+  $("neck").setAttribute("fill", skin);
+  $("body").setAttribute("fill", clothes);
+
+  $("body").setAttribute("d",
+    "M85 285 Q85 240 130 231 L160 250 L190 231 " +
+    "Q235 240 235 285 L235 318 L85 318 Z");
+
+  let back = "";
+  let front = "";
+
+  if (style === "short") {
+    back = "M102 151 Q87 75 160 78 Q233 75 218 151 " +
+           "L208 194 L112 194 Z";
+    front = "M103 139 Q92 78 160 78 Q222 78 217 137 " +
+            "Q190 110 163 111 Q130 108 103 139 Z";
+  } else if (style === "long") {
+    back = "M100 150 Q90 73 160 75 Q230 73 220 150 " +
+           "L224 250 L199 264 L193 170 L127 170 " +
+           "L121 264 L96 250 Z";
+    front = "M103 139 Q92 78 160 78 Q222 78 217 137 " +
+            "Q190 110 163 111 Q130 108 103 139 Z";
+  } else if (style === "curly") {
+    back = "M104 155 Q77 100 110 87 Q118 61 146 78 " +
+           "Q163 59 180 78 Q214 61 218 98 " +
+           "Q243 120 216 160 L210 190 L110 190 Z";
+    front = "M105 133 Q82 98 113 92 Q120 68 145 86 " +
+            "Q162 65 180 85 Q211 67 216 105 " +
+            "Q192 119 173 109 Q145 124 105 133 Z";
+  } else if (style === "bun") {
+    back = "M104 151 Q89 76 160 78 Q231 76 216 151 " +
+           "L208 191 L112 191 Z";
+    front = "M103 139 Q92 78 160 78 Q222 78 217 137 " +
+            "Q190 110 163 111 Q130 108 103 139 Z " +
+            "M133 82 Q122 49 160 43 Q198 49 187 82 Z";
+  } else {
+    back = "M104 151 L91 105 L120 116 L124 78 L151 104 " +
+           "L166 67 L180 104 L207 80 L205 118 L226 105 " +
+           "L216 158 L208 190 L112 190 Z";
+    front = "M103 139 L91 105 L120 116 L124 78 L151 104 " +
+            "L166 67 L180 104 L207 80 L205 118 " +
+            "L217 137 Q190 110 163 111 Q130 108 103 139 Z";
+  }
+
+  $("hairBack").setAttribute("d", back);
+  $("hairBack").setAttribute("fill", hair);
+  $("hair").setAttribute("d", front);
+  $("hair").setAttribute("fill", hair);
+
+  let eyeMarkup = "";
+  if (eyeStyle === "big") {
+    eyeMarkup =
+      '<ellipse cx="139" cy="153" rx="9" ry="12" fill="white"/>' +
+      '<ellipse cx="181" cy="153" rx="9" ry="12" fill="white"/>' +
+      '<circle cx="139" cy="154" r="5" fill="#30251f"/>' +
+      '<circle cx="181" cy="154" r="5" fill="#30251f"/>';
+  } else if (eyeStyle === "happy") {
+    eyeMarkup =
+      '<path d="M129 155 Q139 143 149 155" stroke="#38251c" ' +
+      'stroke-width="4" fill="none" stroke-linecap="round"/>' +
+      '<path d="M171 155 Q181 143 191 155" stroke="#38251c" ' +
+      'stroke-width="4" fill="none" stroke-linecap="round"/>';
+  } else {
+    eyeMarkup =
+      '<ellipse cx="139" cy="153" rx="5" ry="7" fill="#38251c"/>' +
+      '<ellipse cx="181" cy="153" rx="5" ry="7" fill="#38251c"/>';
+  }
+
+  $("features").innerHTML = eyeMarkup +
+    '<path d="M160 157 L155 174 L162 175" stroke="#b87959" ' +
+    'stroke-width="2" fill="none" stroke-linecap="round"/>' +
+    '<path d="M143 183 Q160 194 177 183" stroke="#a44d45" ' +
+    'stroke-width="3" fill="none" stroke-linecap="round"/>' +
+    '<ellipse cx="128" cy="173" rx="9" ry="5" fill="#f58e9a" opacity=".5"/>' +
+    '<ellipse cx="192" cy="173" rx="9" ry="5" fill="#f58e9a" opacity=".5"/>';
+
+  const accessory = $("accessoryChoice").value;
+  let extra = "";
+
+  if (accessory === "glasses") {
+    extra = '<g fill="none" stroke="#272343" stroke-width="4">' +
+      '<rect x="120" y="140" width="34" height="26" rx="9"/>' +
+      '<rect x="166" y="140" width="34" height="26" rx="9"/>' +
+      '<path d="M154 149 L166 149 M120 149 L111 146 M200 149 L209 146"/>' +
+      '</g>';
+  } else if (accessory === "crown") {
+    extra = '<path d="M126 91 L119 62 L143 78 L160 48 ' +
+      'L177 78 L201 62 L194 91 Z" fill="#fbbf24" ' +
+      'stroke="#b7791f" stroke-width="2"/>' +
+      '<circle cx="160" cy="64" r="4" fill="#f472b6"/>';
+  } else if (accessory === "earrings") {
+    extra = '<g fill="#fbbf24" stroke="#b7791f" stroke-width="2">' +
+      '<circle cx="108" cy="181" r="5"/>' +
+      '<circle cx="212" cy="181" r="5"/>' +
+      '</g>';
+  }
+  $("accessory").innerHTML = extra;
+}
+
+function randomize() {
+  const choices = {
+    skin: ["#ffdfc4","#f1c19b","#d99a70","#ad704c","#70452f"],
+    hairStyle: ["short","long","curly","bun","spiky"],
+    hairColor: ["#38251c","#171717","#754c24","#d6a34d","#744c9e","#e16b83"],
+    eyes: ["normal","big","happy"],
+    clothes: ["#6c63ff","#f472b6","#22a699","#2563eb","#ef4444","#f59e0b","#222222"],
+    background: ["#dbeafe","#fce7f3","#d1fae5","#fef3c7","#e9d5ff","#ffffff"],
+    accessoryChoice: ["none","glasses","crown","earrings"]
+  };
+
+  for (const id in choices) {
+    const values = choices[id];
+    $(id).value = values[Math.floor(Math.random() * values.length)];
+  }
+  updateAvatar();
+}
+
+function resetAvatar() {
+  $("skin").value = "#f1c19b";
+  $("hairStyle").value = "short";
+  $("hairColor").value = "#38251c";
+  $("eyes").value = "normal";
+  $("clothes").value = "#6c63ff";
+  $("background").value = "#dbeafe";
+  $("accessoryChoice").value = "none";
+  updateAvatar();
+}
+
+function downloadSVG() {
+  const svg = $("avatar").cloneNode(true);
+  svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  const blob = new Blob(
+    [new XMLSerializer().serializeToString(svg)],
+    {type: "image/svg+xml;charset=utf-8"}
+  );
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "my-avatar.svg";
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function downloadAvatar() {
+  const svg = $("avatar").cloneNode(true);
+  svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  const source = new XMLSerializer().serializeToString(svg);
+  const blob = new Blob([source], {type: "image/svg+xml;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const img = new Image();
+
+  img.onload = function() {
+    const canvas = document.createElement("canvas");
+    canvas.width = 960;
+    canvas.height = 1080;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0, 960, 1080);
+    URL.revokeObjectURL(url);
+    canvas.toBlob(function(png) {
+      if (!png) {
+        alert("Could not create the PNG. Try Download as SVG.");
+        return;
+      }
+      const pngUrl = URL.createObjectURL(png);
+      const link = document.createElement("a");
+      link.href = pngUrl;
+      link.download = "my-avatar.png";
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(pngUrl), 1000);
+    }, "image/png");
+  };
+
+  img.onerror = function() {
+    URL.revokeObjectURL(url);
+    alert("Download failed. Please try again.");
+  };
+  img.src = url;
+}
+
+updateAvatar();
+</script>
+</body>
+  </html>
+  
